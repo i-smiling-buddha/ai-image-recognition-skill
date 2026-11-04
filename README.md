@@ -25,6 +25,30 @@ When an image is shown to an AI model visually:
 **Claude app:** download this repo as a ZIP and upload it under *Settings → Capabilities → Skills*.
 **Claude Code:** copy the folder into `~/.claude/skills/image-recognition/`.
 
+## Use with other AI tools
+`SKILL.md` follows the open **Agent Skills** standard, so this skill is not Claude-only.
+
+First get the skill folder:
+```bash
+git clone https://github.com/i-smiling-buddha/transparent-png-check image-recognition
+```
+
+**OpenAI Codex CLI**
+```bash
+# for all your projects
+mkdir -p ~/.agents/skills && cp -r image-recognition ~/.agents/skills/
+# or only for one repo
+mkdir -p .agents/skills && cp -r image-recognition .agents/skills/
+```
+
+**Other Agent Skills–compatible tools** (Cursor, GitHub Copilot, Gemini CLI and more): copy the folder into the tool's skills directory. Check that tool's docs for the exact path, because each tool picks its own.
+
+**ChatGPT / Gemini chat apps** (no skill system):
+1. Paste the contents of `SKILL.md` into a Custom GPT / Gem's instructions, or at the start of a chat.
+2. Upload `scripts/inspect_image.py` together with your image, and ask the AI to run it. This needs code execution turned on (e.g. ChatGPT's data analysis).
+
+**AI tools without code execution:** the skill can't run there. Run the script yourself (below) and paste the output into the chat instead.
+
 ## Use the script directly
 ```bash
 pip install pillow numpy   # numpy is optional
