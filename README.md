@@ -1,57 +1,35 @@
-# ai-image-recognition (Claude skill)
+# AI Image Recognition Skill
 
-A [Claude](https://claude.ai) skill that makes Claude **recognise an image's real properties from the file itself**, instead of guessing from what it "sees".
+Check an image file's actual properties with a small local Python script. The skill helps an AI agent inspect transparency, file format, dimensions, color, image quality, animation, and metadata instead of guessing from a chat preview.
 
-## The problem
-When an image is shown to an AI model visually:
-- transparency gets flattened, so a transparent PNG looks like it has a white or black background
-- fake "transparent" PNGs, with the grey-white checkerboard baked in, fool it
-- exact size, DPI, true file format and EXIF/GPS metadata are invisible
-- downscaled previews hide blur
+**Useful for:** checking whether a PNG has real transparency or a checkerboard drawn into it, catching an image whose extension does not match its format, and seeing metadata that may include GPS coordinates.
 
-## What it detects
-| Check | Output |
+## Quick install
+
+With the open Agent Skills CLI:
+
+```bash
+npx skills add i-smiling-buddha/ai-image-recognition-skill
+```
+
+Choose the agent you want to install it for when prompted. The repository also includes a standalone Python script, so you can use the image checks without an agent skill loader.
+
+## What it checks
+
+| Image property | What the report shows |
 |---|---|
-| Transparency | REAL / NOT / FAKE checkerboard / alpha unused, % transparent, subject bounding box |
-| True format | real format vs file extension (catches a PNG renamed to .jpg) |
-| Dimensions | size, megapixels, aspect ratio, DPI, print size at 300 DPI |
-| Colors | dominant colors as hex + %, likely background color, grayscale check |
-| Quality | sharpness score + "likely blurry" hint, blank/solid image warning |
-| Animation | frame count and frame duration (GIF/WebP) |
-| Metadata | camera, software, date, **GPS location warning** |
-| Previews | image composited on magenta and black, so the real cutout is visible |
+| Transparency | Real alpha transparency, no transparency, unused alpha, or a likely checkerboard baked into the pixels; transparent percentage and subject bounds |
+| File format | Detected format compared with the filename extension |
+| Dimensions | Pixel dimensions, megapixels, aspect ratio, DPI, and estimated print size at 300 DPI |
+| Color | Dominant colors, likely background color, and grayscale check |
+| Quality | Sharpness estimate and warnings for likely blur or blank/solid images |
+| Animation | Frame count and frame timing for animated formats |
+| Metadata | Available camera, software, date, and a warning when GPS location metadata is present |
+| Previews | Output images composited on magenta and black to make transparent areas visible |
 
-## Install
-**Claude app:** download this repo as a ZIP and upload it under *Settings → Capabilities → Skills*.
-**Claude Code:** copy the folder into `~/.claude/skills/image-recognition/`.
+## Run the script directly
 
-## Use with other AI tools
-`SKILL.md` follows the open **Agent Skills** standard, so this skill is not Claude-only.
-
-First get the skill folder:
-```bash
-git clone https://github.com/i-smiling-buddha/transparent-png-check image-recognition
-```
-
-**OpenAI Codex CLI**
-```bash
-# for all your projects
-mkdir -p ~/.agents/skills && cp -r image-recognition ~/.agents/skills/
-# or only for one repo
-mkdir -p .agents/skills && cp -r image-recognition .agents/skills/
-```
-
-**Other Agent Skills–compatible tools** (Cursor, GitHub Copilot, Gemini CLI and more): copy the folder into the tool's skills directory. Check that tool's docs for the exact path, because each tool picks its own.
-
-**ChatGPT / Gemini chat apps** (no skill system):
-1. Paste the contents of `SKILL.md` into a Custom GPT / Gem's instructions, or at the start of a chat.
-2. Upload `scripts/inspect_image.py` together with your image, and ask the AI to run it. This needs code execution turned on (e.g. ChatGPT's data analysis).
-
-**AI tools without code execution:** the skill can't run there. Run the script yourself (below) and paste the output into the chat instead.
-
-## Use the script directly
-
-Create and activate a virtual environment, then install Pillow. NumPy is optional.
+Requires Python 3 and Pillow. NumPy is optional. A virtual environment keeps the install separate from system Python.
 
 ```bash
 python -m venv .venv
@@ -59,9 +37,21 @@ python -m venv .venv
 # macOS/Linux: source .venv/bin/activate
 python -m pip install pillow
 # Optional: python -m pip install numpy
-python scripts/inspect_image.py mascot.png logo.jpg --out previews
-python scripts/inspect_image.py mascot.png --json
+python scripts/inspect_image.py path/to/image.png --out previews
 ```
 
+Add `--json` for machine-readable output. Replace the example image path with your own file. The script reads the supplied image and writes its report previews to the output folder.
+
+## Use with other agents
+
+This repository follows the open Agent Skills format. The same skill can be installed in compatible tools such as Codex, Claude Code, Cursor, Gemini CLI, and GitHub Copilot. The exact install location depends on the agent; the Skills CLI can configure supported agents for you.
+
+For a chat app without a skill loader, provide `SKILL.md` as instructions and enable code execution. The agent needs access to `scripts/inspect_image.py` and the image file to inspect it.
+
+## Limits
+
+Sharpness and likely-background results are estimates to guide review, not definitive judgments about image quality or subject matter. Check the image visually when the distinction matters. Image metadata can contain personal location information; review the report before sharing it.
+
 ## License
-MIT. Made by **Smiling Buddha** · Chandoriya Technology
+
+MIT. Made by [Smiling Buddha](https://github.com/i-smiling-buddha) · Chandoriya Technology.
