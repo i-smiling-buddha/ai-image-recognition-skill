@@ -50,10 +50,17 @@ mkdir -p .agents/skills && cp -r image-recognition .agents/skills/
 **AI tools without code execution:** the skill can't run there. Run the script yourself (below) and paste the output into the chat instead.
 
 ## Use the script directly
+
+Create and activate a virtual environment, then install Pillow. NumPy is optional.
+
 ```bash
-pip install pillow numpy   # numpy is optional
-python3 scripts/inspect_image.py mascot.png logo.jpg --out previews
-python3 scripts/inspect_image.py mascot.png --json
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
+python -m pip install pillow
+# Optional: python -m pip install numpy
+python scripts/inspect_image.py mascot.png logo.jpg --out previews
+python scripts/inspect_image.py mascot.png --json
 ```
 
 ## License
