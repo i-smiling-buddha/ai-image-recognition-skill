@@ -1,5 +1,7 @@
 # AI Image Recognition Skill
 
+![AI Image Recognition Skill banner](ai-image-recognition-banner.jpg)
+
 Check an image file's actual properties with a small local Python script. The skill helps an AI agent inspect transparency, file format, dimensions, color, image quality, animation, and metadata instead of guessing from a chat preview.
 
 **Useful for:** checking whether a PNG has real transparency or a checkerboard drawn into it, catching an image whose extension does not match its format, and seeing metadata that may include GPS coordinates.
