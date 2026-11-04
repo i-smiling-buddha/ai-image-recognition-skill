@@ -37,6 +37,9 @@ def checker_score(img):
     w, h = rgb.size
     best = 0
     for block in (8, 10, 12, 16, 20):
+        # The 4x4 sample must fit inside the image at every block size.
+        if w < 4 * block or h < 4 * block:
+            continue
         hits = 0
         for cx, cy in [(0, 0), (w - 4*block, 0), (0, h - 4*block), (w - 4*block, h - 4*block)]:
             if cx < 0 or cy < 0:
@@ -80,7 +83,7 @@ def edge_bg_color(img):
     return f"#{base[0]:02x}{base[1]:02x}{base[2]:02x}", round(100*close/len(cols))
 
 def blur_score(img):
-    if np is None:
+    if np is None or min(img.size) < 3:
         return None
     g = np.asarray(img.convert("L").resize((min(img.width, 800), max(1, int(min(img.width, 800) * img.height / img.width)))), dtype=float)
     lap = g[1:-1, 1:-1]*4 - g[:-2, 1:-1] - g[2:, 1:-1] - g[1:-1, :-2] - g[1:-1, 2:]
@@ -108,9 +111,10 @@ def analyze(path, out_dir):
     r["file_size"] = human_size(os.path.getsize(path))
     img = Image.open(path)
     r["format"] = img.format
-    r["true_type_matches_extension"] = (
-        os.path.splitext(path)[1].lower().lstrip(".").replace("jpg", "jpeg") == (img.format or "").lower()
-    )
+    extension = os.path.splitext(path)[1].lower()
+    extension_aliases = {".jpg": ".jpeg", ".jpe": ".jpeg", ".jfif": ".jpeg", ".tif": ".tiff"}
+    normalized_extension = extension_aliases.get(extension, extension)
+    r["true_type_matches_extension"] = normalized_extension == f".{(img.format or '').lower()}"
     r["mode"] = img.mode
     r["size"] = f"{img.width}x{img.height}"
     r["megapixels"] = round(img.width * img.height / 1e6, 2)
