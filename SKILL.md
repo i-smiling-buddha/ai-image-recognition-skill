@@ -1,31 +1,41 @@
 ---
-name: transparent-png-check
-description: Use whenever a PNG/WebP/GIF image is attached or referenced and its transparency matters (mascots, logos, stickers, cutouts) — verify the alpha channel with code instead of trusting vision.
+name: image-recognition
+description: Use whenever an image file is attached or referenced and its real properties matter — transparency, true format, size/DPI, colors, blur, blank images, EXIF/GPS — verify with code instead of trusting vision alone.
 ---
 
-# Transparent PNG Check
+# Image Recognition
 
 ## Why
-When an image is shown to Claude visually, its alpha channel is usually flattened onto white or black. Transparent areas then *look* like a background. Never judge transparency by eye — always check the actual pixel data.
+When an image is shown to Claude visually, a lot of real information is lost or distorted:
+- The alpha channel is flattened onto white/black, so transparent areas *look* like a background.
+- Exact pixel size, DPI, file format, color profile and EXIF/GPS metadata are invisible.
+- Downscaled previews hide blur, compression and tiny details.
+
+So for anything factual about an image, check the file itself with code, then use vision for *what the image shows*.
 
 ## When to use
-- User attaches a PNG/WebP/GIF of a mascot, logo, sticker, character or cutout
-- User asks "is this transparent?", "does it have a background?", or wants it placed on a website/app/merch
-- Before compositing, resizing, or putting an image on a colored background
+- An image (PNG, JPG, WebP, GIF, BMP, TIFF) is attached or a path is given, and the user asks about it or wants it used somewhere (website, app, Play Store, print, merch, Shopify)
+- Questions like "is this transparent?", "what size is it?", "is it good enough to print?", "is this blurry?", "what colors does it use?", "does it have location data?"
+- Before resizing, compositing, cropping, uploading, or putting an image on a colored background
 
 ## Steps
-1. Find the file (attachment by name, or the path the user gave). Work on a copy, never the original.
-2. Run `python3 scripts/check_png.py <file1> [file2 ...]` from this skill's folder (install Pillow with `pip install --break-system-packages pillow` if missing).
-3. Open the generated `*_on_magenta.png` preview to see the real cutout — magenta areas = truly transparent.
-4. Report to the user in plain words:
-   - Whether an alpha channel exists
-   - % fully transparent / semi-transparent / opaque
-   - Subject bounding box (useful for cropping)
-   - If FAKE transparency (checkerboard baked into pixels) was detected, say so clearly and suggest a real background-removal step.
-   - If alpha exists but every pixel is opaque, say the image effectively still has a background.
-5. When later describing or editing the image, treat transparent pixels as "no background" — never describe them as white/black/checkered.
+1. Locate the file (attachment by name, or the user's path). Work on a copy, never the original.
+2. Run the inspector from this skill's folder (install Pillow with `pip install --break-system-packages pillow`; numpy optional):
+   `python3 scripts/inspect_image.py <file1> [file2 ...] --out <scratch-dir>`
+   Add `--json` for machine-readable output.
+3. Open `<name>_on_magenta.png` from the output folder to see the real cutout — magenta = truly transparent.
+4. Combine the script facts with a visual look at the image, then answer in plain words. Lead with what the user asked; mention other findings only if they matter:
+   - **Transparency verdict**: REAL / NOT transparent / FAKE (checkerboard baked in) / alpha unused
+   - **True format** — flag if the extension doesn't match (e.g. a PNG saved as .jpg)
+   - **Size, aspect ratio, DPI**, and print size at 300 DPI when print/merch is involved
+   - **Dominant colors** as hex codes (useful for brand palettes)
+   - **Sharpness hint** — warn if likely blurry/soft
+   - **Blank/solid image** warning
+   - **Animated** frame count for GIF/WebP
+   - **EXIF**: camera/software; if **GPS is present**, warn that the photo contains location data before it's shared publicly
+5. When describing or editing the image afterwards, trust the script over vision: never call transparent pixels "white background" or a checkerboard "transparent".
 
 ## Notes
-- Checkerboard detection is a heuristic (gray/white alternating squares in corners). If unsure, look at the magenta preview — a fake PNG will show no magenta at all.
-- JPG files never have transparency; say so directly.
+- Checkerboard detection and the sharpness score are heuristics — confirm with the previews when it matters.
+- JPG never has transparency; say so directly.
 - Reply in the user's preferred language.
