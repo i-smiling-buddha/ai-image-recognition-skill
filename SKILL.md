@@ -20,9 +20,9 @@ So for anything factual about an image, check the file itself with code, then us
 
 ## Steps
 1. Locate the file (attachment by name, or the user's path). Work on a copy, never the original.
-2. Run the inspector from this skill's folder (install Pillow with `pip install --break-system-packages pillow`; numpy optional):
-   `python3 scripts/inspect_image.py <file1> [file2 ...] --out <scratch-dir>`
-   Add `--json` for machine-readable output.
+2. Run the inspector from this skill's folder. Use an existing virtual environment or create and activate one with `python -m venv .venv`, then install Pillow with `python -m pip install pillow` (numpy is optional). Avoid installing packages into system Python.
+   `python scripts/inspect_image.py <file1> [file2 ...] --out <scratch-dir>`
+   Use `python3` instead of `python` if that is the Python 3 command on your system. Add `--json` for machine-readable output.
 3. Open `<name>_on_magenta.png` from the output folder to see the real cutout — magenta = truly transparent.
 4. Combine the script facts with a visual look at the image, then answer in plain words. Lead with what the user asked; mention other findings only if they matter:
    - **Transparency verdict**: REAL / NOT transparent / FAKE (checkerboard baked in) / alpha unused
