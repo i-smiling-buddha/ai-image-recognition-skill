@@ -1,4 +1,4 @@
-# image-recognition (Claude skill)
+# ai-image-recognition (Claude skill)
 
 A [Claude](https://claude.ai) skill that makes Claude **recognise an image's real properties from the file itself**, instead of guessing from what it "sees".
 
