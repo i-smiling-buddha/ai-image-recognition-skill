@@ -6,6 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3-blue.svg?style=for-the-badge)](https://www.python.org/)
 [![Agent Skills](https://img.shields.io/badge/Agent-Skills-purple.svg?style=for-the-badge)](https://skills.sh/)
+[![skills.sh installs](https://skills.sh/b/i-smiling-buddha/ai-image-recognition-skill)](https://skills.sh/i-smiling-buddha/ai-image-recognition-skill)
 
 **Stop guessing. Inspect the actual image file.**
 
@@ -94,7 +95,7 @@ For a chat app without a skill loader, provide `SKILL.md` as the instructions an
 
 ## Contributing
 
-Issues, bug reports, test images (with personal metadata removed), and pull requests are welcome. Please avoid uploading private or sensitive images in public issues.
+Issues, bug reports, test images (with personal metadata removed), and pull requests are welcome. Please avoid uploading private or sensitive images in public issues. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
