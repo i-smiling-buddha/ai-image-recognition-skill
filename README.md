@@ -2,57 +2,99 @@
 
 ![AI Image Recognition Skill banner](ai-image-recognition-banner.jpg)
 
-Check an image file's actual properties with a small local Python script. The skill helps an AI agent inspect transparency, file format, dimensions, color, image quality, animation, and metadata instead of guessing from a chat preview.
+[![GitHub stars](https://img.shields.io/github/stars/i-smiling-buddha/ai-image-recognition-skill?style=for-the-badge)](https://github.com/i-smiling-buddha/ai-image-recognition-skill/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3-blue.svg?style=for-the-badge)](https://www.python.org/)
+[![Agent Skills](https://img.shields.io/badge/Agent-Skills-purple.svg?style=for-the-badge)](https://skills.sh/)
 
-**Useful for:** checking whether a PNG has real transparency or a checkerboard drawn into it, catching an image whose extension does not match its format, and seeing metadata that may include GPS coordinates.
+**Stop guessing. Inspect the actual image file.**
 
-## Quick install
+AI vision can describe what an image looks like, but it cannot reliably tell you every property hidden in the original file. This open-source Agent Skill gives compatible AI coding agents a local Python image inspector so they can verify transparency, true file format, dimensions, DPI, colors, sharpness hints, animation, and privacy-related metadata using the file itself.
 
-With the open Agent Skills CLI:
+Useful for AI-generated images, design handoffs, transparent PNGs, website assets, app screenshots, print/merch preparation, and product photography.
+
+## Install
+
+Install with the open Agent Skills CLI:
 
 ```bash
 npx skills add i-smiling-buddha/ai-image-recognition-skill
 ```
 
-Choose the agent you want to install it for when prompted. The repository also includes a standalone Python script, so you can use the image checks without an agent skill loader.
+Choose your target agent when prompted. See the [Skills directory](https://skills.sh/) for the wider ecosystem.
 
 ## What it checks
 
-| Image property | What the report shows |
+| Check | What you get |
 |---|---|
-| Transparency | Real alpha transparency, no transparency, unused alpha, or a likely checkerboard baked into the pixels; transparent percentage and subject bounds |
-| File format | Detected format compared with the filename extension |
-| Dimensions | Pixel dimensions, megapixels, aspect ratio, DPI, and estimated print size at 300 DPI |
-| Color | Dominant colors, likely background color, and grayscale check |
-| Quality | Sharpness estimate and warnings for likely blur or blank/solid images |
-| Animation | Frame count and frame timing for animated formats |
-| Metadata | Available camera, software, date, and a warning when GPS location metadata is present |
-| Previews | Output images composited on magenta and black to make transparent areas visible |
+| **Real transparency** | Detects usable alpha transparency, unused alpha channels, and likely checkerboards baked into opaque pixels |
+| **True file format** | Compares the image's detected format with its filename extension |
+| **Dimensions & print** | Pixel dimensions, megapixels, aspect ratio, embedded DPI, and estimated print dimensions at 300 DPI |
+| **Colors** | Dominant colors as hex values, grayscale detection, and likely edge/background color |
+| **Image quality** | A heuristic sharpness score and warnings for likely blurry or solid images |
+| **Animation** | Frame count and frame timing where available |
+| **Metadata & privacy** | Camera/software/date metadata and a warning when GPS metadata is present |
+| **Visual previews** | Composites the image over magenta and black so transparent areas are easy to inspect |
 
-## Run the script directly
+## Example tasks
 
-Requires Python 3 and Pillow. NumPy is optional. A virtual environment keeps the install separate from system Python.
+Ask your AI agent:
+
+- “Is this PNG genuinely transparent, or is the checkerboard part of the image?”
+- “Check whether this image is large enough for a 300-DPI print.”
+- “Find the dominant colors and give me their hex codes.”
+- “Does this photo contain GPS metadata I should remove before sharing?”
+- “Check whether the file extension matches its real image format.”
+- “Is this image animated, and how many frames does it contain?”
+
+The skill combines **programmatic file facts** with visual interpretation. Use the script's report for exact properties and the agent's vision for understanding the depicted content.
+
+## Run the inspector without an AI agent
+
+Requirements: Python 3 and Pillow. NumPy is optional; it adds the sharpness estimate. Use a virtual environment to keep dependencies isolated.
 
 ```bash
+# Create a virtual environment
 python -m venv .venv
-# Windows: .venv\Scripts\activate
-# macOS/Linux: source .venv/bin/activate
+
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+
+# macOS / Linux (use this instead of the Windows command)
+source .venv/bin/activate
+
+# Install dependencies
 python -m pip install pillow
 # Optional: python -m pip install numpy
+
+# Inspect one or more images
 python scripts/inspect_image.py path/to/image.png --out previews
+
+# Get machine-readable JSON
+python scripts/inspect_image.py path/to/image.png --json
 ```
 
-Add `--json` for machine-readable output. Replace the example image path with your own file. The script reads the supplied image and writes its report previews to the output folder.
+Replace the example path with your image path. The script reads the supplied image and writes magenta/black preview images to the output directory.
 
-## Use with other agents
+## Compatibility
 
-This repository follows the open Agent Skills format. The same skill can be installed in compatible tools such as Codex, Claude Code, Cursor, Gemini CLI, and GitHub Copilot. The exact install location depends on the agent; the Skills CLI can configure supported agents for you.
+This repository follows the open [Agent Skills format](https://agentskills.io/). It is designed for compatible agents and tools that can load a `SKILL.md`, run local Python, and access the target image file. The Skills CLI can install it into supported agents; exact support and installation locations vary by tool.
 
-For a chat app without a skill loader, provide `SKILL.md` as instructions and enable code execution. The agent needs access to `scripts/inspect_image.py` and the image file to inspect it.
+For a chat app without a skill loader, provide `SKILL.md` as the instructions and make sure the agent has code execution plus access to both `scripts/inspect_image.py` and the image file.
 
-## Limits
+## Important limitations
 
-Sharpness and likely-background results are estimates to guide review, not definitive judgments about image quality or subject matter. Check the image visually when the distinction matters. Image metadata can contain personal location information; review the report before sharing it.
+- Checkerboard detection, likely-background detection, and sharpness are **heuristics**, not guarantees. Review the previews and image when the distinction matters.
+- A sharpness score is only produced when NumPy is installed and the image is suitable for the calculation.
+- Print-size estimates are based on 300 DPI; they do not guarantee print quality.
+- Metadata availability depends on the image format and the metadata embedded in the file.
+- The inspector does not edit or overwrite the original image. Review generated reports before sharing them.
+
+**Privacy note:** image metadata can reveal where a photo was taken. If GPS metadata is reported, consider removing it before publishing the image.
+
+## Contributing
+
+Issues, bug reports, test images (with personal metadata removed), and pull requests are welcome. Please avoid uploading private or sensitive images in public issues.
 
 ## License
 
