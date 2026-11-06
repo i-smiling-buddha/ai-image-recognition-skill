@@ -1,6 +1,8 @@
 ---
 name: image-recognition
 description: Use whenever an image file is attached or referenced and its real properties matter — transparency, true format, size/DPI, colors, blur, blank images, EXIF/GPS — verify with code instead of trusting vision alone.
+license: MIT
+compatibility: Requires Python 3 and Pillow. NumPy is optional and adds the sharpness estimate. The agent must be able to access the image file and run local Python.
 ---
 
 # Image Recognition
