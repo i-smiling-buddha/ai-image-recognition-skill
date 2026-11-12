@@ -10,6 +10,8 @@
 
 **Stop guessing. Inspect the actual image file.**
 
+हिंदी गाइड: **[README.hi.md](README.hi.md)**
+
 AI vision can describe what an image looks like, but it cannot reliably tell you every property hidden in the original file. This open-source Agent Skill gives compatible AI coding agents a local Python image inspector so they can verify transparency, true file format, dimensions, DPI, colors, sharpness hints, animation, and privacy-related metadata using the file itself.
 
 Useful for AI-generated images, design handoffs, transparent PNGs, website assets, app screenshots, print/merch preparation, and product photography.
