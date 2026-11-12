@@ -99,4 +99,4 @@ Issues, bug reports, test images (with personal metadata removed), and pull requ
 
 ## License
 
-MIT. Made by [Smiling Buddha](https://github.com/i-smiling-buddha) · Chandoriya Technology.
+MIT. Made by [Smiling Buddha](https://github.com/i-smiling-buddha) · [DESITechnology](https://desitechnology.com).
