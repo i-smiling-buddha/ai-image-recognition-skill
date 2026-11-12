@@ -102,6 +102,69 @@ Include a real example image and terminal output only after testing them yoursel
 
 **Day 7:** Respond to feedback, open issues for confirmed bugs, and ship a small follow-up release if warranted.
 
+## Assets
+
+| Asset | File |
+|---|---|
+| Fake vs real transparency (real inspector previews) | `docs/assets/fake-vs-real-transparency.png` — the best first image for any post |
+| Terminal demo GIF (real `inspect_image.py` output) | `docs/assets/inspector-demo.gif` |
+| Social preview (1280×660, < 1 MB) | `ai-image-recognition-banner.jpg` → upload in *Settings → General → Social preview* |
+
+## LinkedIn
+
+Ever downloaded a "transparent PNG" and found a checkerboard baked into the pixels? AI chat
+previews can't always tell either.
+
+I've open-sourced **AI Image Recognition Skill** — a free Agent Skill that lets your AI agent
+inspect the actual image file: real vs fake transparency, true format, size/DPI for print, dominant
+colors, blur hints, animation, and GPS metadata you may not want to share.
+
+Works with Claude Code, Codex, Cursor and more:
+`npx skills add i-smiling-buddha/ai-image-recognition-skill`
+
+Free and MIT 👉 https://github.com/i-smiling-buddha/ai-image-recognition-skill
+
+#OpenSource #AI #Design #DeveloperTools
+
+## हिंदी post (X / LinkedIn / WhatsApp)
+
+"Transparent PNG" download किया और बाद में पता चला कि checkerboard तो image में ही छपा हुआ है? 😅
+AI भी अक्सर preview देखकर यही गलती करता है।
+
+मैंने एक free, open-source skill बनाई है — **AI Image Recognition Skill**। यह असली file check करती है:
+- transparency असली है या नकली checkerboard
+- file का असली format, size और print के लिए DPI
+- main colors के hex codes, blur, animation
+- photo में GPS location तो नहीं छुपी
+
+Install: `npx skills add i-smiling-buddha/ai-image-recognition-skill`
+GitHub: https://github.com/i-smiling-buddha/ai-image-recognition-skill (हिंदी गाइड भी है)
+
+## YouTube Shorts / Reels script (faceless, 30 s, Hindi voiceover)
+
+1. **Hook (0–3 s)** — screen: the fake checkerboard PNG on a website, looking broken. VO: "Transparent PNG लगाया, website पर checkerboard आ गया?"
+2. **Reveal (3–15 s)** — screen: `docs/assets/fake-vs-real-transparency.png`. VO: "क्योंकि ये transparency नकली थी — checkerboard pixels में ही बना हुआ है।"
+3. **Demo (15–25 s)** — screen: `docs/assets/inspector-demo.gif`. VO: "ये free skill आपके AI agent को असली file check करना सिखाती है — FAKE या REAL, सेकंडों में।"
+4. **CTA (25–30 s)** — screen: install command + GitHub URL. VO: "एक command, बिल्कुल free। Link description में।"
+
+## Repository metadata
+
+- **Description:** `Free Agent Skill: your AI checks the real image file — fake vs real transparency, true format, size/DPI, colors, blur, animation, GPS metadata. Claude Code, Codex, Cursor.`
+- **Website:** `https://desitechnology.com`
+- **Topics:** `ai-agents`, `agent-skills`, `claude-code`, `codex`, `cursor`, `image-processing`, `image-analysis`, `transparency`, `png`, `exif`, `metadata`, `privacy`, `pillow`, `python`, `design-tools`, `vibe-coding`, `developer-tools`
+
+## Good first issues (ideas)
+
+1. Detect fake transparency on JPEGs saved from checkerboard previews (lossy edges).
+2. Add AVIF / HEIC support notes and tests.
+3. Report color profile (sRGB vs Display P3) more clearly.
+4. Hindi output mode for the human-readable report.
+5. Sample images folder with expected outputs for regression tests.
+
+## Cross-promotion
+
+End posts with: "Also from me: **Smart Model Router** — routes each coding task to the cheapest model that can do it: https://github.com/i-smiling-buddha/smart-model-router-skill"
+
 ## Success metrics
 
 Track weekly GitHub stars, forks, unique visitors, clone counts (if available), issues, pull requests, and successful installs where a directory exposes install data. Do not treat stars alone as proof of adoption.
