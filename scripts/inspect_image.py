@@ -5,7 +5,8 @@ Usage: python3 inspect_image.py <image> [more images ...] [--out DIR] [--json]
 Requires: Pillow (pip install pillow). numpy is optional (faster, adds blur score).
 """
 import sys, os, json
-from PIL import Image, ImageOps, ExifTags
+from io import BytesIO
+from PIL import Image, ImageOps, ExifTags, features
 
 try:
     import numpy as np
@@ -106,6 +107,17 @@ def exif_summary(img):
         out["GPS"] = "PRESENT (location embedded — strip before sharing publicly)"
     return out
 
+def icc_profile_description(profile):
+    """Read the embedded description when Pillow has LittleCMS support."""
+    if not features.check("littlecms2"):
+        return None
+    from PIL import ImageCms
+
+    try:
+        return " ".join(ImageCms.getProfileDescription(BytesIO(profile)).split()) or None
+    except ImageCms.PyCMSError:
+        return None
+
 def analyze(path, out_dir):
     r = {"file": path}
     r["file_size"] = human_size(os.path.getsize(path))
@@ -123,7 +135,12 @@ def analyze(path, out_dir):
     if dpi:
         r["dpi"] = f"{round(dpi[0])}x{round(dpi[1])}"
         r["print_size_inches_at_300dpi"] = f"{img.width/300:.2f} x {img.height/300:.2f}"
-    r["icc_profile"] = "yes" if img.info.get("icc_profile") else "no"
+    profile = img.info.get("icc_profile")
+    r["icc_profile"] = "yes" if profile else "no"
+    if profile:
+        description = icc_profile_description(profile)
+        if description:
+            r["icc_profile_description"] = description
     n_frames = getattr(img, "n_frames", 1)
     r["frames"] = n_frames
     if n_frames > 1:
