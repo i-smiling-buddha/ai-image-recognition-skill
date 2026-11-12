@@ -16,6 +16,8 @@ AI vision यह बता सकता है कि image में क्य�
 
 AI-generated images, design handoffs, transparent PNGs, website assets, app screenshots, print/merch की तैयारी और product photography के लिए उपयोगी।
 
+![Transparent दिखता है? Inspector बताता है कि एक PNG में checkerboard pixels में ही बना है (नकली), और दूसरे में असली transparency है](docs/assets/fake-vs-real-transparency.png)
+
 ## Install
 
 Open Agent Skills CLI से install करें:
@@ -77,6 +79,8 @@ python scripts/inspect_image.py path/to/image.png --out previews
 python scripts/inspect_image.py path/to/image.png --json
 ```
 
+![Terminal demo: inspect_image.py एक PNG को FAKE और दूसरे को REAL transparency बताता है](docs/assets/inspector-demo.gif)
+
 Example path की जगह अपनी image का path डालें। Script दी गई image पढ़ती है और output folder में magenta/black preview images लिखती है।
 
 ## Compatibility
@@ -94,6 +98,10 @@ Example path की जगह अपनी image का path डालें। 
 - Inspector original image को edit या overwrite नहीं करता। Generated reports share करने से पहले देख लें।
 
 **Privacy note:** image metadata से पता चल सकता है कि photo कहाँ ली गई थी। अगर GPS metadata report हो, तो image publish करने से पहले उसे हटाने पर विचार करें।
+
+## Smiling Buddha की और free skills
+
+- **[Smart Model Router Skill](https://github.com/i-smiling-buddha/smart-model-router-skill)** — tokens और API credits बचाइए: आपका agent हर coding task को उस सबसे सस्ते model पर भेजता है जो उसे भरोसे से कर सके, result verify करता है, और fail होने पर ही बड़े model पर जाता है। `npx skills add i-smiling-buddha/smart-model-router-skill`
 
 ## Contributing
 

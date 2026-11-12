@@ -16,6 +16,8 @@ AI vision can describe what an image looks like, but it cannot reliably tell you
 
 Useful for AI-generated images, design handoffs, transparent PNGs, website assets, app screenshots, print/merch preparation, and product photography.
 
+![Looks transparent? The inspector shows one PNG has a fake checkerboard baked into its pixels and the other has real transparency](docs/assets/fake-vs-real-transparency.png)
+
 ## Install
 
 Install with the open Agent Skills CLI:
@@ -77,6 +79,8 @@ python scripts/inspect_image.py path/to/image.png --out previews
 python scripts/inspect_image.py path/to/image.png --json
 ```
 
+![Terminal demo: inspect_image.py reports FAKE transparency for one PNG and REAL transparency for another](docs/assets/inspector-demo.gif)
+
 Replace the example path with your image path. The script reads the supplied image and writes magenta/black preview images to the output directory.
 
 ## Compatibility
@@ -94,6 +98,10 @@ For a chat app without a skill loader, provide `SKILL.md` as the instructions an
 - The inspector does not edit or overwrite the original image. Review generated reports before sharing them.
 
 **Privacy note:** image metadata can reveal where a photo was taken. If GPS metadata is reported, consider removing it before publishing the image.
+
+## More free skills by Smiling Buddha
+
+- **[Smart Model Router Skill](https://github.com/i-smiling-buddha/smart-model-router-skill)** — save tokens and API credits: your agent routes each coding task to the cheapest model that can reliably do it, verifies the result, and escalates only when it fails. `npx skills add i-smiling-buddha/smart-model-router-skill`
 
 ## Contributing
 
