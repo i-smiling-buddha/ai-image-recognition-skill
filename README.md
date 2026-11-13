@@ -83,6 +83,8 @@ python scripts/inspect_image.py path/to/image.png --json
 
 Replace the example path with your image path. The script reads the supplied image and writes magenta/black preview images to the output directory.
 
+Text and JSON reports show whether an ICC profile is embedded and include its description when Pillow can read it, for example sRGB or Display P3. Colours can shift on the web when a platform strips the profile or a browser or display cannot reproduce the image's colour gamut. The inspector reports the profile without converting the image's colours.
+
 ## Compatibility
 
 This repository follows the open [Agent Skills format](https://agentskills.io/). It is designed for compatible agents and tools that can load a `SKILL.md`, run local Python, and access the target image file. The Skills CLI can install it into supported agents; exact support and installation locations vary by tool.
