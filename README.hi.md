@@ -106,6 +106,7 @@ Text और JSON reports बताती हैं कि image में ICC pr
 
 - **[Smart Model Router Skill](https://github.com/i-smiling-buddha/smart-model-router-skill)** — tokens और API credits बचाइए: आपका agent हर coding task को उस सबसे सस्ते model पर भेजता है जो उसे भरोसे से कर सके, result verify करता है, और fail होने पर ही बड़े model पर जाता है। `npx skills add i-smiling-buddha/smart-model-router-skill`
 - **[Reflection Skill](https://github.com/i-smiling-buddha/reflection-skill)** — किसी भी app, website, game या software का clean-room तरीके से अपना version बनाइए: आपका agent उसे बाहर से study करता है, हर screen, flow और data table map करता है, फिर आपके अपने brand के साथ बेहतर version बनाता है। `npx skills add i-smiling-buddha/reflection-skill`
+- **[PPT Animation Skill](https://github.com/i-smiling-buddha/ppt-animation-skill)** — किसी भी topic को Kurzgesagt-style animated explainer video में बदलिए: आपका agent script लिखता है, offline Hindi/English voiceover बनाता है, हर scene को SVG में animate करता है और 1080p MP4 render करता है, बिना किसी paid API के। `npx skills add i-smiling-buddha/ppt-animation-skill`
 
 ## Contributing
 
