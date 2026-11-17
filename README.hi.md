@@ -18,6 +18,8 @@ AI-generated images, design handoffs, transparent PNGs, website assets, app scre
 
 ![Transparent दिखता है? Inspector बताता है कि एक PNG में checkerboard pixels में ही बना है (नकली), और दूसरे में असली transparency है](docs/assets/fake-vs-real-transparency.png)
 
+![Terminal demo: inspect_image.py नकली और असली transparency, .png नाम वाली JPEG, 300 DPI पर print size, camera EXIF और छिपा GPS पकड़ता है](docs/assets/inspector-demo.gif)
+
 ## Install
 
 Open Agent Skills CLI से install करें:
@@ -79,7 +81,6 @@ python scripts/inspect_image.py path/to/image.png --out previews
 python scripts/inspect_image.py path/to/image.png --json
 ```
 
-![Terminal demo: inspect_image.py एक PNG को FAKE और दूसरे को REAL transparency बताता है](docs/assets/inspector-demo.gif)
 
 Example path की जगह अपनी image का path डालें। Script दी गई image पढ़ती है और output folder में magenta/black preview images लिखती है।
 

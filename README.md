@@ -18,6 +18,8 @@ Useful for AI-generated images, design handoffs, transparent PNGs, website asset
 
 ![Looks transparent? The inspector shows one PNG has a fake checkerboard baked into its pixels and the other has real transparency](docs/assets/fake-vs-real-transparency.png)
 
+![Terminal demo: inspect_image.py catches FAKE vs REAL transparency, a JPEG saved as .png, print size at 300 DPI, camera EXIF and embedded GPS](docs/assets/inspector-demo.gif)
+
 ## Install
 
 Install with the open Agent Skills CLI:
@@ -79,7 +81,6 @@ python scripts/inspect_image.py path/to/image.png --out previews
 python scripts/inspect_image.py path/to/image.png --json
 ```
 
-![Terminal demo: inspect_image.py reports FAKE transparency for one PNG and REAL transparency for another](docs/assets/inspector-demo.gif)
 
 Replace the example path with your image path. The script reads the supplied image and writes magenta/black preview images to the output directory.
 
