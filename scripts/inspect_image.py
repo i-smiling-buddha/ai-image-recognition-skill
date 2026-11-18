@@ -32,10 +32,38 @@ def ratio(w, h):
     common = {"1:1": "square", "16:9": "widescreen", "9:16": "vertical/story", "4:3": "", "3:4": "", "3:2": "", "2:3": ""}
     return r + (f" ({common[r]})" if common.get(r) else "") if (w//g) < 50 else f"{w/h:.3f}"
 
-def checker_score(img):
-    """Fake transparency: grey/white checkerboard baked into the corners."""
+def checker_score(img, is_jpeg=False):
+    """Fake transparency: grey/white checkerboard baked into the corners.
+
+    JPEG compression softens the alternating tiles and nudges near-white/near-grey
+    values a few levels in either direction, so a faint checkerboard that is obvious
+    in a PNG can fall just under the crisp-image thresholds and slip past. For JPEGs
+    we average a small patch at each sample point (so block noise on a single pixel
+    cannot swing the reading) and relax the grey and contrast tolerances. The result
+    stays a heuristic estimate, not a guaranteed classification.
+    """
     rgb = img.convert("RGB")
     w, h = rgb.size
+    # Crisp sources keep the strict thresholds; JPEGs get a measured tolerance.
+    # (grey colour tol, min brightness, grey samples needed /16, min contrast, patch radius)
+    grey_tol, bright_min, min_grey, contrast_min, radius = (
+        (16, 140, 14, 11, 1) if is_jpeg else (12, 150, 16, 15, 0)
+    )
+
+    def sample(x, y):
+        # radius 0 reproduces the original single-pixel read exactly; a larger
+        # radius averages a (2*radius+1)^2 square to shrug off JPEG quantisation noise.
+        if radius == 0:
+            return rgb.getpixel((x, y))
+        rs = gs = bs = n = 0
+        for dy in range(-radius, radius + 1):
+            for dx in range(-radius, radius + 1):
+                px = min(max(x + dx, 0), w - 1)
+                py = min(max(y + dy, 0), h - 1)
+                pr, pg, pb = rgb.getpixel((px, py))
+                rs += pr; gs += pg; bs += pb; n += 1
+        return (rs // n, gs // n, bs // n)
+
     best = 0
     for block in (8, 10, 12, 16, 20):
         # The 4x4 sample must fit inside the image at every block size.
@@ -48,12 +76,13 @@ def checker_score(img):
             vals = []
             for by in range(4):
                 for bx in range(4):
-                    r, g, b = rgb.getpixel((cx + bx*block + block//2, cy + by*block + block//2))
+                    r, g, b = sample(cx + bx*block + block//2, cy + by*block + block//2)
                     vals.append((r, g, b, (bx + by) % 2))
-            grey = all(abs(r-g) < 12 and abs(g-b) < 12 and r > 150 for r, g, b, _ in vals)
+            grey_hits = sum(1 for r, g, b, _ in vals
+                            if abs(r-g) < grey_tol and abs(g-b) < grey_tol and r > bright_min)
             even = [v[0] for v in vals if v[3] == 0]
             odd = [v[0] for v in vals if v[3] == 1]
-            if grey and abs(sum(even)/len(even) - sum(odd)/len(odd)) > 15:
+            if grey_hits >= min_grey and abs(sum(even)/len(even) - sum(odd)/len(odd)) > contrast_min:
                 hits += 1
         best = max(best, hits)
     return best
@@ -123,6 +152,8 @@ def analyze(path, out_dir):
     r["file_size"] = human_size(os.path.getsize(path))
     img = Image.open(path)
     r["format"] = img.format
+    # Capture the source format before exif_transpose, which drops img.format.
+    is_jpeg = (img.format or "").upper() in ("JPEG", "MPO")
     extension = os.path.splitext(path)[1].lower()
     extension_aliases = {".jpg": ".jpeg", ".jpe": ".jpeg", ".jfif": ".jpeg", ".tif": ".tiff"}
     normalized_extension = extension_aliases.get(extension, extension)
@@ -176,7 +207,7 @@ def analyze(path, out_dir):
     else:
         r["transparency"] = {"has_alpha": False}
         verdict = "NOT transparent"
-        if checker_score(img) >= 2:
+        if checker_score(img, is_jpeg=is_jpeg) >= 2:
             verdict = "FAKE transparency (checkerboard baked into pixels)"
         bg, pct = edge_bg_color(img)
         r["edge_background"] = {"color": bg, "border_match_pct": pct}
