@@ -86,6 +86,19 @@ Example path की जगह अपनी image का path डालें। 
 
 Text और JSON reports बताती हैं कि image में ICC profile है या नहीं। Pillow उसे पढ़ सके तो उसका नाम भी दिखता है, जैसे sRGB या Display P3। अगर platform profile हटा दे, या browser या display उस colour gamut के रंग न दिखा सके, तो वेब पर रंग अलग दिख सकते हैं। Inspector profile की जानकारी देता है और image के रंगों को बदलता नहीं है।
 
+### AVIF और HEIC सपोर्ट
+
+Inspector उन्हीं decoders का इस्तेमाल करता है जो Pillow में उपलब्ध हैं। Pillow की सामान्य installation में JPEG और PNG पढ़े जा सकते हैं। Pillow 11.3 से कई wheels में AVIF decoder शामिल है। अपनी build में AVIF सपोर्ट देखने के लिए `python -m PIL` चलाएँ। [Pillow के AVIF रिलीज़ नोट्स](https://pillow.readthedocs.io/en/stable/releasenotes/11.3.0.html#avif-support-in-wheels) देखें।
+
+HEIC के लिए `pillow-heif` install करें और जिस Python process में inspector चलाएँ, उसी में decoder register करें। Virtual environment सक्रिय करके repository की मुख्य directory से ये commands चलाएँ। [pillow-heif plugin documentation](https://pillow-heif.readthedocs.io/en/stable/pillow-plugin.html) देखें।
+
+```bash
+python -m pip install pillow-heif
+python -c "import runpy; from pillow_heif import register_heif_opener; register_heif_opener(); runpy.run_path('scripts/inspect_image.py', run_name='__main__')" photo.heic --out previews
+```
+
+अगर Pillow कोई file नहीं खोल पाता, तो text report में उसके लिए `ERROR:` और असली error message दिखता है, जैसे `cannot identify image file`। `--json` के साथ उस file की entry में `file` और `error` होते हैं। बाकी input files की जाँच जारी रहती है।
+
 ## Compatibility
 
 यह repository open [Agent Skills format](https://agentskills.io/) follow करती है। यह उन compatible agents और tools के लिए बनी है जो `SKILL.md` load कर सकें, local Python चला सकें, और target image file तक पहुँच सकें। Skills CLI इसे supported agents में install कर सकता है; exact support और install location हर tool में अलग होती है।
